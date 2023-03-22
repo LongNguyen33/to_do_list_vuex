@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <Navbar> </Navbar>
     <div v-if="!change.onAbout">
+      <Navbar> </Navbar>
       <Todos> </Todos>
       <StatusBar></StatusBar>
       <ProgressBar></ProgressBar>
