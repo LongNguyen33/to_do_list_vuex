@@ -1,48 +1,46 @@
 <template>
-  <div class="navbar">
-    <h1>My Vuex App Todos</h1>
+  <nav class="navbar">
     <ul>
-      <li>Home</li>
-      <router-link to="/about" @click.native="CHANGE_TO_ABOUT"
-        >About</router-link
-      >
-      <li v-if="auth.isAuthenticated && !change.onAbout">
-        Total Todos: {{ todos.length }}
-        <router-link @click.native="TOGGLE_AUTH" to="/" tag="button"
-          >Logout</router-link
+      <li>
+        <router-link to="/">Home</router-link>
+      </li>
+      <li>
+        <router-link to="/about">About</router-link>
+      </li>
+      <li>
+        <b-button type="is-danger" @click="setAuthenticated(false)"
+          >LOGOUT</b-button
         >
       </li>
-      <router-link v-else @click.native="TOGGLE_AUTH" to="/" tag="button"
-        >Login</router-link
-      >
     </ul>
-  </div>
+  </nav>
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { mapMutations } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
-  name: "Navbar-todo",
-  computed: mapState(["todos", "auth", "change"]),
-  methods: mapMutations(["TOGGLE_AUTH", "CHANGE_TO_ABOUT"]),
+  name: "NavBar",
+  methods: {
+    ...mapActions("auth", ["setAuthenticated"]),
+  },
 };
 </script>
 
 <style>
 .navbar {
-  padding: 5px;
-  text-align: center;
-  background: rgb(240, 240, 240);
-  color: black;
+  font-size: 24px;
+  background: #f2f2f2;
+  padding: 10px;
 }
-
-.navbar ul {
+ul {
+  list-style-type: none;
+  margin: 20px;
+  padding: 20px;
   display: flex;
   justify-content: space-around;
-  align-items: center;
-  list-style: none;
-  padding: 0;
+}
+router-link {
+  margin: 20px;
 }
 </style>

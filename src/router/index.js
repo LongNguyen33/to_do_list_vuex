@@ -1,16 +1,32 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import About from '../components/About.vue'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
-Vue.use(Router)
+Vue.use(VueRouter);
 
-const constantRoutes = [
-    {path: '/about', component: About},
-]
-const createRouter = () => new Router({
-    scrollBehavior: () => ({ y: 0 }),
-    routes: constantRoutes
-  })
-const router = createRouter()
+const AboutScreen = () => import(/* webpackChunkName: "setup" */ '@/views/AboutScreen.vue');
+const HomeScreen = () => import(/* webpackChunkName: "base" */ '@/views/HomeScreen.vue');
 
-export default router
+const routes = [
+  {
+    path: '/',
+    name: 'HomeScreen',
+    component: HomeScreen,
+    meta: {
+      title: 'Home',
+    },
+  },
+  {
+    path: '/about',
+    name: 'AboutScreen',
+    component: AboutScreen,
+    meta: {
+      title: 'About',
+    },
+  },
+];
+
+const router = new VueRouter({
+  routes,
+});
+
+export default router;

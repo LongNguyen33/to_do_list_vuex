@@ -1,46 +1,39 @@
 <template>
   <div id="app">
-    <div v-if="!change.onAbout">
-      <Navbar> </Navbar>
-      <Todos> </Todos>
-      <StatusBar></StatusBar>
-      <ProgressBar></ProgressBar>
+    <div v-if="!isAuthenticated">
+      <h1>No login</h1>
+      <b-button type="is-primary" @click="setAuthenticated(true)"
+        >LOGIN</b-button
+      >
     </div>
     <div v-else>
-      <router-view></router-view>
+      <NavBar />
+      <router-view />
     </div>
   </div>
 </template>
 
 <script>
-import Todos from "./components/Todos.vue";
-import Navbar from "./components/Navbar.vue";
-import StatusBar from "./components/StatusBar.vue";
-import ProgressBar from "./components/ProgressBar.vue";
-import { mapState } from "vuex";
-
+import { mapGetters, mapActions } from "vuex";
+import NavBar from "@/components/NavBar";
 export default {
   name: "App",
   components: {
-    Todos,
-    Navbar,
-    StatusBar,
-    ProgressBar,
+    NavBar,
   },
   computed: {
-    ...mapState(["change"]),
+    ...mapGetters({
+      isAuthenticated: "auth/isAuthenticated",
+    }),
+  },
+  methods: {
+    ...mapActions("auth", ["setAuthenticated"]),
   },
 };
 </script>
 
-<style>
+<style >
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background: rgb(219, 219, 219);
-  margin: 20px auto;
-  width: 90%;
-  max-width: 800px;
+  padding: 20px
 }
 </style>
