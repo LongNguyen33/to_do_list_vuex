@@ -1,6 +1,7 @@
 <template>
-  <div class="todo-list">
-    <ul v-if="auth.isAuthenticated">
+  <div class="todo-list" v-if="auth.isAuthenticated">
+    <AddForm></AddForm>
+    <ul>
       <li
         v-for="todo in todos"
         :key="todo.id"
@@ -12,17 +13,26 @@
           :checked="todo.completed"
           @change="MARK_COMPLETED(todo.id)"
         />
+        <button @click="deleteTodo(todo.id)">Delete</button>
       </li>
     </ul>
   </div>
 </template>
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
+import AddForm from "./AddForm.vue";
 
 export default {
   name: "Todo-list",
+  components: { AddForm },
   computed: mapState(["todos", "auth"]),
-  methods: mapMutations(["MARK_COMPLETED"]),
+  created() {
+    this.getTodos();
+  },
+  methods: {
+    ...mapMutations(["MARK_COMPLETED"]),
+    ...mapActions(["deleteTodo", "getTodos"]),
+  },
 };
 </script>
 <style>
@@ -58,5 +68,15 @@ export default {
 }
 .todo-list li.completed {
   background: rgb(119, 218, 243);
+}
+.todo-list li button {
+  float: right;
+  margin-right: 20px;
+}
+
+.todo-list li button:hover {
+  cursor: pointer;
+  background: red;
+  color: white;
 }
 </style>

@@ -6,7 +6,7 @@
       <router-link to="/about" @click.native="CHANGE_TO_ABOUT"
         >About</router-link
       >
-      <li v-if="auth.isAuthenticated">
+      <li v-if="auth.isAuthenticated && !change.onAbout">
         Total Todos: {{ todos.length }}
         <router-link @click.native="TOGGLE_AUTH" to="/" tag="button"
           >Logout</router-link
@@ -25,7 +25,7 @@ import { mapMutations } from "vuex";
 
 export default {
   name: "Navbar-todo",
-  computed: mapState(["todos", "auth"]),
+  computed: mapState(["todos", "auth", "change"]),
   methods: mapMutations(["TOGGLE_AUTH", "CHANGE_TO_ABOUT"]),
 };
 </script>

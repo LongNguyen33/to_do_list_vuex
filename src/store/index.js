@@ -1,15 +1,11 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-
+import axios from 'axios';
 Vue.use(Vuex);
 
 const storeData = {
     state: {
-        todos: [
-            {id: 1, title: 'Viec1', completed: false }, 
-            {id: 2, title: 'Viec2', completed: false }, 
-            {id: 3, title: 'Viec3', completed: false }, 
-            ],
+        todos: [],
         auth: {
             isAuthenticated: false
         },
@@ -21,6 +17,33 @@ const storeData = {
         doneTodos:state => state.todos.filter(todo => todo.completed),
         progress:(state,getters) => {
             return Math.round(getters.doneTodos.length / state.todos.length *100)
+        }
+    },
+    actions: {
+        async deleteTodo({commit}, todoId){
+            try { 
+                await axios.delete(`https://jsonplaceholder.typicode.com/todos/${todoId}`)
+                commit('DELETE_TODO', todoId)
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        async addTodo({commit}, newTodo){
+            try {
+                await axios.post('https://jsonplaceholder.typicode.com/todos',newTodo)
+                commit('ADD_TODO',newTodo);
+            } catch (error) {
+                console.log(error)
+            }
+ 
+        },
+        async getTodos({commit}){
+            try{
+                const response = await axios.get('https://jsonplaceholder.typicode.com/todos?_limit=5')
+                commit('SET_TODOS',response.data)
+            }catch(error){
+                console.log(error);
+            } 
         }
     },
     mutations: {
@@ -39,6 +62,15 @@ const storeData = {
             if (state.auth.isAuthenticated){
                 state.change.onAbout = !state.change.onAbout
             }
+        },
+        DELETE_TODO(state, todoId){
+            state.todos = state.todos.filter(todo => todo.id !== todoId)
+        },
+        ADD_TODO(state, newtodo){
+            state.todos.push(newtodo)
+        },
+        SET_TODOS(state, todos){
+            state.todos = todos
         }
     }
 }
