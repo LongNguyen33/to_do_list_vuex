@@ -1,6 +1,5 @@
 <template>
-  <div class="todo-list" v-if="auth.isAuthenticated">
-    <AddForm></AddForm>
+  <div class="todo-list">
     <ul>
       <li
         v-for="todo in todos"
@@ -19,19 +18,23 @@
   </div>
 </template>
 <script>
-import { mapState, mapMutations, mapActions } from "vuex";
-import AddForm from "./AddForm.vue";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 
 export default {
   name: "Todo-list",
-  components: { AddForm },
-  computed: mapState(["todos", "auth"]),
+  computed: {
+    ...mapGetters({
+      isAuthenticated: "auth/isAuthenticated",
+      todos: "todo/todos",
+    }),
+  },
   created() {
     this.getTodos();
   },
   methods: {
-    ...mapMutations(["MARK_COMPLETED"]),
-    ...mapActions(["deleteTodo", "getTodos"]),
+    ...mapActions("todo", ["getTodos"]),
+    ...mapActions("todo", ["deleteTodo"]),
+    ...mapMutations("todo", ["MARK_COMPLETED"]),
   },
 };
 </script>

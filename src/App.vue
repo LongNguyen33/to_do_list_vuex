@@ -15,7 +15,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import NavBar from "@/components/NavBar";
+import NavBar from "./components/Navbar.vue";
 export default {
   name: "App",
   components: {
@@ -32,8 +32,8 @@ export default {
 };
 </script>
 
-<style >
+<style>
 #app {
-  padding: 20px
+  padding: 20px;
 }
 </style>

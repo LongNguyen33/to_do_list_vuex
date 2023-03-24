@@ -2,13 +2,16 @@
   <nav class="navbar">
     <ul>
       <li>
-        <router-link to="/">Home</router-link>
+        <router-link to="/" style="margin-left: 15px">Home</router-link>
       </li>
       <li>
-        <router-link to="/about">About</router-link>
+        <router-link to="/about" style="margin-left: 15px">About</router-link>
       </li>
       <li>
-        <b-button type="is-danger" @click="setAuthenticated(false)"
+        <b-button
+          style="margin-left: 15px"
+          type="is-danger"
+          @click="setAuthenticated(false)"
           >LOGOUT</b-button
         >
       </li>

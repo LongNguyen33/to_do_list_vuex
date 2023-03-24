@@ -1,14 +1,40 @@
-import axios from "axios"
+import axios from "axios";
+import { GET_TO_DO } from "../types/actions.type";
+import { SET_TO_DO } from "../types/mutations.type";
 
 const state = {
-  todos: [],
+  todos: [0],
+  doneTodos: null,
+  progress: 0,
 };
 const getters = {
+  todos: ({ todos }) => todos,
   doneTodos: (state) => state.todos.filter((todo) => todo.completed),
   progress: (state, getters) => {
     return Math.round((getters.doneTodos.length / state.todos.length) * 100);
   },
 };
+
+const mutations = {
+  MARK_COMPLETED(state, todoId){
+    state.todos.map((todo) => {
+      if (todo.id === todoId) {
+        todo.completed = !todo.completed;
+        return todo;
+      }
+    });
+  },
+  DELETE_TODO(state, todoId) {
+    state.todos = state.todos.filter((todo) => todo.id !== todoId);
+  },
+  ADD_TODO(state, newtodo) {
+    state.todos.push(newtodo);
+  },
+  [SET_TO_DO]: (state, todos) => {
+    state.todos = todos;
+  },
+};
+
 const actions = {
   async deleteTodo({ commit }, todoId) {
     try {
@@ -28,41 +54,18 @@ const actions = {
       console.log(error);
     }
   },
-  async getTodos({ commit }) {
+  [GET_TO_DO]: async ({ commit }) => {
     try {
       const response = await axios.get(
         "https://jsonplaceholder.typicode.com/todos?_limit=5"
       );
-      commit("SET_TODOS", response.data);
+      commit(SET_TO_DO, response.data);
     } catch (error) {
       console.log(error);
     }
   },
 };
-const mutations = {
-  MARK_COMPLETED(state, todoId) {
-    state.todos.map((todo) => {
-      if (todo.id === todoId) {
-        todo.completed = !todo.completed;
-        return todo;
-      }
-    });
-  },
-  CHANGE_TO_ABOUT(state) {
-    if (state.auth.isAuthenticated) {
-      state.change.onAbout = !state.change.onAbout;
-    }
-  },
-  DELETE_TODO(state, todoId) {
-    state.todos = state.todos.filter((todo) => todo.id !== todoId);
-  },
-  ADD_TODO(state, newtodo) {
-    state.todos.push(newtodo);
-  },
-  SET_TODOS(state, todos) {
-    state.todos = todos;
-  },
-};
+
 
 export default {
   namespaced: true,
